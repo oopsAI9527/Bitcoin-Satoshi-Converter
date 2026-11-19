@@ -10,7 +10,7 @@ COPY tests ./tests
 RUN npm run build
 
 # production
-FROM nginxinc/nginx-unprivileged:1.30.7-alpine
+FROM nginx:1.31.9-alpine
 USER root
 RUN sed -i 's/worker_processes .*/worker_processes 1;/' /etc/nginx/nginx.conf
 USER 1000:1000
