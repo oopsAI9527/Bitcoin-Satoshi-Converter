@@ -16,7 +16,7 @@ export const normalizeApiId = (id: unknown): number => {
 };
 
 const parsePrice = (value: unknown): number => {
-  return typeof value === 'number' || (typeof value === 'string' && value.trim() !== '') ? Number(value) : NaN;
+  return typeof value === 'number' || (typeof value === 'string' && value.trim() !== '') ? Number(value) : Number.NaN;
 };
 
 export async function fetchFiatPrice(apiId = 40, signal?: AbortSignal): Promise<FiatPriceData> {

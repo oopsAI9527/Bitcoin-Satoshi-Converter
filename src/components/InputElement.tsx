@@ -14,7 +14,13 @@ interface InputElementProps {
 }
 
 export default function InputElement({ label, endLabel, value, disabled, onInputChange }: InputElementProps) {
-  const decimalScale = endLabel === 'BTC' ? 8 : endLabel === 'sat' ? 0 : 2;
+  let decimalScale = 2;
+  if (endLabel === 'BTC') {
+    decimalScale = 8;
+  } else if (endLabel === 'sat') {
+    decimalScale = 0;
+  }
+
   return (
     <NumericFormat
       id={label}

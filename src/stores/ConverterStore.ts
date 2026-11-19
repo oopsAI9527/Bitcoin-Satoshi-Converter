@@ -6,8 +6,13 @@ const INITIAL_SIM_PRICE = 85_000;
 type Currency = 'EUR' | 'BTC' | 'sat';
 
 const convertAmount = (amount: string, inputCurrency: Currency, price: number) => {
-  const sats = inputCurrency === 'EUR' ? convertEuroToSats(amount, price)
-    : inputCurrency === 'BTC' ? convertBtcToSats(amount) : amount;
+  let sats = amount;
+  if (inputCurrency === 'EUR') {
+    sats = convertEuroToSats(amount, price);
+  } else if (inputCurrency === 'BTC') {
+    sats = convertBtcToSats(amount);
+  }
+
   return {
     inputCurrency,
     convertedEuro: inputCurrency === 'EUR' ? amount : convertSatsToEuro(sats, price),
@@ -56,7 +61,11 @@ const useStore = create<ConverterState>((set) => ({
   setEurFiatPrice: (eurFiatPrice) => {
     eurFiatPrice = Number.isFinite(eurFiatPrice) && eurFiatPrice > 0 ? eurFiatPrice : 0;
     set((state) => {
-      const amount = state.inputCurrency === 'EUR' ? state.convertedEuro : state.inputCurrency === 'BTC' ? state.convertedBitcoin : state.convertedSatoshi;
+      const amount = {
+        EUR: state.convertedEuro,
+        BTC: state.convertedBitcoin,
+        sat: state.convertedSatoshi,
+      }[state.inputCurrency];
       const shouldUpdateSimPrice = !state.simPriceInitialized && eurFiatPrice > 0;
 
       return {
